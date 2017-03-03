@@ -22,7 +22,7 @@ def send_list(title, message, api_key, divider):
     messagestr = divider.join(message)
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = "{\"body\":\""+ messagestr + "\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
+    payload = "{\"body\":\""+ repr(messagestr)+"\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
     headers = {
         'access-token': api_key,
         'content-type': "application/json",
