@@ -7,8 +7,8 @@ import simplepushbullet.py
 
 send_message(title, message, api_key):
 
-Takes a title, message, and your api key pushes to all devices
+Takes a title, message, and your api key: pushes to all devices
 
-send_list(title, message, api_key, divider):
+send_list(title, message, api_key):
 
-Takes a title, message, api key and character to divide the string up with newline causes Pushbullet to reject it looking into why, Pushes to all devices
+Takes a title, message, api key: pushes to all devices
