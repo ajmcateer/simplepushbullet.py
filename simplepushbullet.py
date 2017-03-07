@@ -8,27 +8,75 @@ def send_message(title, message, api_key):
     payload = "{\"body\":\""+ message + "\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
     headers = {
         'access-token': api_key,
-        'content-type': "application/json",
-        'cache-control': "no-cache",
-        'postman-token': "30fcf100-2b7b-8707-1de7-6014da51140b"
-        }
+        'content-type': "application/json"
+    }
     response = requests.request("POST", url, data=payload, headers=headers)
 
     return response.text
 
-def send_list(title, message, api_key, divider):
+def send_list(title, message, api_key):
     """Send notification"""
-
-    messagestr = divider.join(message)
+    message_str = "\n".join(message)
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = "{\"body\":\""+ repr(messagestr)+"\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
+    payload = "{\"body\":\""+ repr(message_str)+"\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    return response.text
+
+def get_pushes(api_key):
+    #if limit > 500:
+     #   limit = 500
+
+    url = "https://api.pushbullet.com/v2/pushes"
+
+    headers = {
+        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'content-type': "application/json"
+    }
+    response = requests.request("GET", url, headers=headers)
+
+    return response.text
+
+def delete_push(api_key, iden):
+    url = "https://api.pushbullet.com/v2/pushes/" + iden
+
     headers = {
         'access-token': api_key,
         'content-type': "application/json",
-        'cache-control': "no-cache",
-        'postman-token': "30fcf100-2b7b-8707-1de7-6014da51140b"
-        }
-    response = requests.request("POST", url, data=payload, headers=headers)
+    }
+
+    response = requests.request("DELETE", url, headers=headers)
 
     return response.text
+
+def delete_all_pushed(api_key):
+    url = "https://api.pushbullet.com/v2/pushes/"
+
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json",
+    }
+
+    response = requests.request("DELETE", url, headers=headers)
+
+    return response.text
+
+def get_all_devices:
+    url = "https://api.pushbullet.com/v2/devices"
+
+    headers = {
+        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'content-type': "application/json",
+    }
+
+    response = requests.request("GET", url, headers=headers)
+
+    return response.text
+
+get_pushes("o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg")
