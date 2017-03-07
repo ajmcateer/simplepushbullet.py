@@ -67,16 +67,14 @@ def delete_all_pushed(api_key):
 
     return response.text
 
-def get_all_devices:
+def get_all_devices(api_key):
     url = "https://api.pushbullet.com/v2/devices"
 
     headers = {
-        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'access-token': api_key,
         'content-type': "application/json",
     }
 
     response = requests.request("GET", url, headers=headers)
 
     return response.text
-
-get_pushes("o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg")
