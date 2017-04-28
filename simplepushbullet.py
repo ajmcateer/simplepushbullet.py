@@ -1,6 +1,7 @@
 """A simple Pushbullet interface"""
 import requests
 
+
 def send_message(title, message, api_key):
     """Sends text note to pushbullet notification"""
 
@@ -13,6 +14,7 @@ def send_message(title, message, api_key):
     response = requests.request("POST", url, data=payload, headers=headers)
 
     return response.text
+
 
 def send_list(title, message, api_key):
     """Send notification"""
@@ -29,19 +31,39 @@ def send_list(title, message, api_key):
 
     return response.text
 
-def get_pushes(api_key):
-    #if limit > 500:
-     #   limit = 500
+
+def get_pushes(api_key, limit=500):
+    if limit > 500:
+        limit = 500
+
+    elif limit < 1:
+        limit = 1
 
     url = "https://api.pushbullet.com/v2/pushes"
+
+    payload = {'limit': limit}
 
     headers = {
         'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
         'content-type': "application/json"
     }
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request("GET", url, params=payload, headers=headers)
 
     return response.text
+
+
+def dismiss_push(api_key, iden):
+    url = "https://api.pushbullet.com/v2/pushes/" + iden
+
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json",
+    }
+
+    response = requests.request("POST", url, headers=headers)
+
+    return response.text
+
 
 def delete_push(api_key, iden):
     url = "https://api.pushbullet.com/v2/pushes/" + iden
@@ -55,6 +77,7 @@ def delete_push(api_key, iden):
 
     return response.text
 
+
 def delete_all_pushed(api_key):
     url = "https://api.pushbullet.com/v2/pushes/"
 
@@ -67,6 +90,7 @@ def delete_all_pushed(api_key):
 
     return response.text
 
+
 def get_all_devices(api_key):
     url = "https://api.pushbullet.com/v2/devices"
 
@@ -78,3 +102,20 @@ def get_all_devices(api_key):
     response = requests.request("GET", url, headers=headers)
 
     return response.text
+
+
+def create_device(api_key,nickname,):
+
+    url = "https://api.pushbullet.com/v2/devices"
+
+    payload = "{\"nickname\":\"Sample\",\"model\":\"Samsung SG5\",\"manufacturer\":\"note\"}\r\n\r\n"
+    headers = {
+        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'content-type': "application/json",
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
+
+print(get_pushes("o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg", 2))
