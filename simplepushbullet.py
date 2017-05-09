@@ -32,7 +32,7 @@ def send_list(title, message, api_key):
     return response.text
 
 
-def get_pushes(api_key, limit=500):
+def get_pushes(api_key, limit=500, active="true", modified_after=0):
     if limit > 500:
         limit = 500
 
@@ -41,10 +41,10 @@ def get_pushes(api_key, limit=500):
 
     url = "https://api.pushbullet.com/v2/pushes"
 
-    payload = {'limit': limit}
+    payload = {'limit': limit, 'active': active, 'modified_after': modified_after}
 
     headers = {
-        'access-token': "o.vcqOkijhQRNJ5XjRxECXaTRbdm4dlQIg",
+        'access-token': api_key,
         'content-type': "application/json"
     }
     response = requests.request("GET", url, params=payload, headers=headers)
