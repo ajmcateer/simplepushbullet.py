@@ -1,12 +1,23 @@
 """A simple Pushbullet interface"""
 import requests
 
+def get_user(api_key):
+    url = "https://api.pushbullet.com/v2/users/me"
+
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json"
+    }
+    response = requests.request("GET", url, headers=headers)
+
+    return response.text
+
 
 def send_message(title, message, api_key):
     """Sends text note to pushbullet notification"""
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = "{\"body\":\""+ message + "\",\"title\":\""+ title +"\",\"type\":\"note\"}\r\n"
+    payload = {'body': message,'title': title}
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -21,7 +32,7 @@ def send_list(title, message, api_key):
     message_str = "\n".join(message)
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = "{\"body\":\"" + repr(message_str) + "\",\"title\":\"" + title + "\",\"type\":\"note\"}\r\n"
+    payload = {'body': repr(message_str), 'title': title}
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -112,16 +123,70 @@ def create_device(api_key,nickname="", model="", manufacturer="", app_version=""
     has_sms = "false"
 
     if has_sms == "true":
-        payload = "{\"nickname\":\"" + nickname + "\",\"model\":\"" + model + "\",\"manufacturer\":\"" + manufacturer + "\"," \
-              "\"app_version\":\"" + app_version + "\",\"icon\":\"" + icon + "\"}"
+        payload = {'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
+                   'icon': icon, 'has_sms': has_sms}
     else:
-        payload = "{\"nickname\":\"" + nickname + "\",\"model\":\"" + model + "\",\"manufacturer\":\"" + manufacturer + "\"," \
-              "\"app_version\":\"" + app_version + "\",\"icon\":\"" + icon + "\"}"
+        payload = {'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
+                   'icon': icon}
     headers = {
         'access-token': api_key,
         'content-type': "application/json",
     }
 
     response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
+
+
+def list_chats(api_key):
+    url = "https://api.pushbullet.com/v2/chats"
+
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json",
+    }
+
+    response = requests.request("GET", url, headers=headers)
+
+    print(response.text)
+
+
+def create_chat(api_key, email):
+    url = "https://api.pushbullet.com/v2/chats"
+
+    payload = {'email': email}
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
+
+
+def update_chat(api_key, mute, iden):
+    url = "https://api.pushbullet.com/v2/chats" + iden
+
+    payload = {'mute': mute}
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
+
+
+def delete_chat(api_key,iden)
+    url = "https://api.pushbullet.com/v2/chats" + iden
+
+    headers = {
+        'access-token': api_key,
+        'content-type': "application/json"
+    }
+
+    response = requests.request("DELETE", url, headers=headers)
 
     print(response.text)
