@@ -195,13 +195,3 @@ def delete_chat(api_key, iden):
     response = requests.request("DELETE", url, headers=headers)
 
     return response.text
-
-# print(send_message('', '', 'o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
-# print(create_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', email='simplepushbullet@gmail.com'))
-# print(list_chats(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
-# print(delete_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjAdVpR3rsi'))
-# res_dict = json.loads(list_chats(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
-# print(delete_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjArp1yiWn6'))
-# print(get_pushes(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', limit=1))
-# print(dismiss_push(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjAbY5QZdy8'))
-# print(send_list(title='test', message=['1', '2', '3'], api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
