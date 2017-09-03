@@ -1,5 +1,7 @@
 """A simple Pushbullet interface"""
 import requests
+import json
+
 
 def get_user(api_key):
     url = "https://api.pushbullet.com/v2/users/me"
@@ -17,7 +19,8 @@ def send_message(title, message, api_key):
     """Sends text note to pushbullet notification"""
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = {'body': message,'title': title}
+    payload = json.dumps({"body": message, "title": title, "type": "note"})
+
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -32,7 +35,7 @@ def send_list(title, message, api_key):
     message_str = "\n".join(message)
 
     url = "https://api.pushbullet.com/v2/pushes"
-    payload = {'body': repr(message_str), 'title': title}
+    payload = json.dumps({'body': message_str, 'title': title, "type": "note"})
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -52,7 +55,7 @@ def get_pushes(api_key, limit=500, active="true", modified_after=0):
 
     url = "https://api.pushbullet.com/v2/pushes"
 
-    payload = {'limit': limit, 'active': active, 'modified_after': modified_after}
+    payload = json.dumps({'limit': limit, 'active': active, 'modified_after': modified_after})
 
     headers = {
         'access-token': api_key,
@@ -66,12 +69,14 @@ def get_pushes(api_key, limit=500, active="true", modified_after=0):
 def dismiss_push(api_key, iden):
     url = "https://api.pushbullet.com/v2/pushes/" + iden
 
+    payload = json.dumps({'dismissed': True})
+
     headers = {
         'access-token': api_key,
         'content-type': "application/json",
     }
 
-    response = requests.request("POST", url, headers=headers)
+    response = requests.request("POST", url, data=payload, headers=headers)
 
     return response.text
 
@@ -115,7 +120,7 @@ def get_all_devices(api_key):
     return response.text
 
 
-def create_device(api_key,nickname="", model="", manufacturer="", app_version="", icon="desktop"):
+def create_device(api_key, nickname="", model="", manufacturer="", app_version="", icon="desktop"):
 
     url = "https://api.pushbullet.com/v2/devices"
 
@@ -123,11 +128,11 @@ def create_device(api_key,nickname="", model="", manufacturer="", app_version=""
     has_sms = "false"
 
     if has_sms == "true":
-        payload = {'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
-                   'icon': icon, 'has_sms': has_sms}
+        payload = json.dumps({'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
+                   'icon': icon, 'has_sms': has_sms})
     else:
-        payload = {'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
-                   'icon': icon}
+        payload = json.dumps({'nickname': nickname, 'model': model, 'manufacturer': manufacturer, 'app_version': app_version,
+                   'icon': icon})
     headers = {
         'access-token': api_key,
         'content-type': "application/json",
@@ -135,7 +140,7 @@ def create_device(api_key,nickname="", model="", manufacturer="", app_version=""
 
     response = requests.request("POST", url, data=payload, headers=headers)
 
-    print(response.text)
+    return response.text
 
 
 def list_chats(api_key):
@@ -148,13 +153,13 @@ def list_chats(api_key):
 
     response = requests.request("GET", url, headers=headers)
 
-    print(response.text)
+    return response.text
 
 
 def create_chat(api_key, email):
     url = "https://api.pushbullet.com/v2/chats"
 
-    payload = {'email': email}
+    payload = json.dumps({'email': email})
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -162,13 +167,13 @@ def create_chat(api_key, email):
 
     response = requests.request("POST", url, data=payload, headers=headers)
 
-    print(response.text)
+    return response.text
 
 
 def update_chat(api_key, mute, iden):
     url = "https://api.pushbullet.com/v2/chats" + iden
 
-    payload = {'mute': mute}
+    payload = json.dumps({'mute': mute})
     headers = {
         'access-token': api_key,
         'content-type': "application/json"
@@ -176,11 +181,11 @@ def update_chat(api_key, mute, iden):
 
     response = requests.request("POST", url, data=payload, headers=headers)
 
-    print(response.text)
+    return response.text
 
 
-def delete_chat(api_key,iden)
-    url = "https://api.pushbullet.com/v2/chats" + iden
+def delete_chat(api_key, iden):
+    url = "https://api.pushbullet.com/v2/chats/" + iden
 
     headers = {
         'access-token': api_key,
@@ -189,4 +194,14 @@ def delete_chat(api_key,iden)
 
     response = requests.request("DELETE", url, headers=headers)
 
-    print(response.text)
+    return response.text
+
+# print(send_message('', '', 'o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
+# print(create_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', email='simplepushbullet@gmail.com'))
+# print(list_chats(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
+# print(delete_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjAdVpR3rsi'))
+# res_dict = json.loads(list_chats(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))
+# print(delete_chat(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjArp1yiWn6'))
+# print(get_pushes(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', limit=1))
+# print(dismiss_push(api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930', iden='ujvjcr9H6I0sjAbY5QZdy8'))
+# print(send_list(title='test', message=['1', '2', '3'], api_key='o.x8wWqf9X4j7jywUMqBss5NGZlNFb1930'))

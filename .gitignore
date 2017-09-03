@@ -4,3 +4,6 @@
 .idea/vcs.xml
 .idea/workspace.xml
 .vscode/launch.json
+scratch.py
+__pycache__/simplepushbullet.cpython-36.pyc
+UnitTests/api_key.txt
